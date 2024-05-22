@@ -1,9 +1,4 @@
 const express = require('express');
-// const mongoose = require(mongoose);
-// Mongodb connection
-// mongoose.connect('mongodb://localhost/netplay', (err) => {
-//   console.log(err ? err : 'Connection stablished');
-// });
 let app = express();
 
 // setup view engine
