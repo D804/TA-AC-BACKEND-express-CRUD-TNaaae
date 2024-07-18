@@ -2,29 +2,27 @@ let express = require('express');
 let router = express.Router();
 let User = require('../models/Users');
 router.get('/', (req, res) => {
-  res.render('');
+  User.find({}, (err, users) => {
+    if (err) return next(err);
+    res.render('user', { users: users });
+  });
 });
-router.post('/', (req, res) => {
-  let userData = req.body;
-  User.find({})
-    .then((user) => {
-      res.render('user', { userlist: user });
-    })
-    .catch((err) => {
-      next(err);
-    });
-
+router.get('/new', (req, res) => {
   res.render('form');
 });
-router.get('/:id', (req, res) => {
+router.post('/', (req, res, next) => {
+  let userData = req.body;
+  User.create(userData, (err, user) => {
+    if (err) return next(err);
+    res.redirect(302, '/users');
+  });
+});
+router.get('/:id', (req, res, next) => {
   let id = req.params.id;
-  User.findById(id)
-    .then((user) => {
-      res.render('singleuser', { useerDetails: user });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  User.findById(id, (err, user) => {
+    if (err) return next(err);
+    res.render('singleuser.ejs', { user: user });
+  });
 });
 
 module.exports = router;
